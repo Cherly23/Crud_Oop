@@ -7,7 +7,7 @@ package Tampilan;
 import Kelas.User;
 import Kelas.Sesion;
 
-/**
+/** 
  *
  * @author cherly
  */
@@ -45,6 +45,7 @@ public class Dasboard extends javax.swing.JFrame {
         mProduct = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N

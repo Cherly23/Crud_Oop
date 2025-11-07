@@ -71,7 +71,7 @@ public class Product extends Koneksi{
     public void TambahProduct(){
         query = "INSERT INTO product VALUES(?,?,?,?,?) ";
         
-        try {
+        try { 
             ps = koneksi.prepareStatement(query); 
             ps.setInt(1, productId);
             ps.setString(2, productName);
@@ -122,6 +122,18 @@ public class Product extends Koneksi{
         query = "SELECT * FROM product";
         
         try {
+            st = koneksi.createStatement();
+            rs = st.executeQuery(query);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan");
+        }
+        return rs;
+    }
+    
+    public  ResultSet autoId() {
+        try {
+            query = "SELECT productId AS ID FROM product ORDER BY productId DESC LIMIT 1";
+            
             st = koneksi.createStatement();
             rs = st.executeQuery(query);
         } catch (SQLException e) {

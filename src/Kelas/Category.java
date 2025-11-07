@@ -97,4 +97,41 @@ public class Category extends Koneksi{
         }
         return rs;
     }
+    
+    public ResultSet dataComboBox() {
+        try {
+            query = "SELECT categoryName FROM category";
+            
+            st = koneksi.createStatement();
+            rs = st.executeQuery(query);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database Eror");
+        }
+        return rs;
+    }
+    
+    public ResultSet konversi() {
+        try {
+            query = "SELECT categoryId FROM category WHERE categoryName = ?";
+            
+            ps = koneksi.prepareStatement(query);
+            ps.setString(1, this.categoryName);
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan");
+        }
+        return rs;  
+    }
+    
+    public ResultSet autoId() {
+        try {
+            query = "SELECT categoryId AS ID FROM category ORDER BY categoryId DESC LIMIT 1";
+            
+            st = koneksi.createStatement();
+            rs = st.executeQuery(query);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan");
+        }
+        return rs;
+    }
 }

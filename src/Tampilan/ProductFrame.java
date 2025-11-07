@@ -5,9 +5,11 @@
 package Tampilan;
 
 import Kelas.Product;
+import Kelas.Category;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +23,7 @@ public class ProductFrame extends javax.swing.JFrame {
     public ProductFrame() {
         initComponents();
         load_table();
+        ComboBox();
         reset();
     }
     
@@ -30,6 +33,37 @@ public class ProductFrame extends javax.swing.JFrame {
         tPrice.setText(null);
         tDescription.setText(null);
         cbCategory.setSelectedItem(null);
+    }
+    
+    void autoId() {
+        try {
+            Product prdID = new Product();
+            ResultSet rs = prdID.autoId();
+            
+            if (rs.next()) {
+                int id = rs.getInt("ID") + 1;
+                tID.setText(String.valueOf(id));
+            }else {
+                tID.setText("1");
+            }
+        } catch (SQLException e) {
+             JOptionPane.showMessageDialog(null, "ID EROR");
+        }
+    }
+    
+    void ComboBox() {
+        try {
+            Category value = new Category();
+            ResultSet rs = value.dataComboBox();
+            
+            while (rs.next()) {
+                String data = rs.getString("categoryName");
+                cbCategory.addItem(data);
+                
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, " ComboBox EROR");
+        }
     }
     
     void load_table(){
@@ -116,7 +150,9 @@ public class ProductFrame extends javax.swing.JFrame {
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Price");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 273, 26, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 273, 130, -1));
+
+        tID.setEnabled(false);
         getContentPane().add(tID, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 77, 137, -1));
         getContentPane().add(tNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 133, 137, -1));
         getContentPane().add(tPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 295, 137, -1));
@@ -293,11 +329,6 @@ public class ProductFrame extends javax.swing.JFrame {
         Product prd = new Product();
         prd.setProductId(Integer.parseInt(tID.getText()));
         
-        if (cbCategory.getSelectedItem()=="Active") {
-            prd.setProductCategory(1);
-        } else {
-            prd.setProductCategory(0); 
-        }
         prd.HapusProduct();
         load_table();
         reset();

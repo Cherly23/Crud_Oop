@@ -4,10 +4,11 @@
  */
 package Tampilan;
 
-import Kelas.Category;
+import Kelas.Category; 
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,6 +28,22 @@ public class CategoryFrame extends javax.swing.JFrame {
      void reset(){
         tID.setText(null);
         tNama.setText(null);
+    }
+     
+      void autoId() {
+        try {
+            Category ctgID = new Category();
+            ResultSet rs = ctgID.autoId();
+            
+            if (rs.next()) {
+                int id = rs.getInt("ID") + 1;
+                tID.setText(String.valueOf(id));
+            }else {
+                tID.setText("1");
+            }
+        } catch (SQLException e) {
+             JOptionPane.showMessageDialog(null, "ID EROR");
+        }
     }
     
     void load_table(){
@@ -206,9 +223,8 @@ public class CategoryFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         Category ctg = new Category();
         ctg.setCategoryId(Integer.parseInt(tID.getText()));
-        ctg.setCategoryName(tNama.getText());
-        ctg.HapusCategory();
         
+        ctg.HapusCategory();
         load_table();
         reset();
     }//GEN-LAST:event_btnHapusActionPerformed
