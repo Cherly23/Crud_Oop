@@ -8,6 +8,7 @@ import Kelas.User;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 /**
  *
  * @author cherly
@@ -251,10 +252,11 @@ public class UserFrame  extends javax.swing.JFrame {
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
         // TODO add your handling code here:
         User usr = new User();
-        usr.setUserEmail(tEmail.getText());
+        
         usr.setUserPassword(jPassword.getText());
         usr.setUserFullName(tFullname.getText());
         usr.setUserName(tUsername.getText());
+        usr.setUserEmail(tEmail.getText());
         
         if (cStatus.getSelectedItem()=="Active") {
             usr.setUserStatus(1);
@@ -289,12 +291,8 @@ public class UserFrame  extends javax.swing.JFrame {
             tUsername.setText(username);
             tEmail.setText(email);
             tFullname.setText(fullname);
+            cStatus.setSelectedItem(status);
             
-            if (status.equals("1") || status.equalsIgnoreCase("Active")) {
-                cStatus.setSelectedItem("Active");
-            } else {
-                cStatus.setSelectedItem("Inactive");
-            }
         }
     }//GEN-LAST:event_tblUserMouseClicked
 

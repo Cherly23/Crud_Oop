@@ -15,7 +15,7 @@ public class Dasboard extends javax.swing.JFrame {
 
     public Dasboard() {
         initComponents();
-        tUsename.setText(Sesion.getUsername());
+        tUsername.setText(Sesion.getUsername());
         tEmail.setText(Sesion.getEmail());
         tFullName.setText(Sesion.getFullname());
     }
@@ -33,7 +33,7 @@ public class Dasboard extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        tUsename = new javax.swing.JTextField();
+        tUsername = new javax.swing.JTextField();
         tEmail = new javax.swing.JTextField();
         tFullName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -63,7 +63,7 @@ public class Dasboard extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Nama              :");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, -1, -1));
-        getContentPane().add(tUsename, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 120, 145, -1));
+        getContentPane().add(tUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 120, 145, -1));
         getContentPane().add(tEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 170, 145, -1));
         getContentPane().add(tFullName, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 220, 145, -1));
 
@@ -209,6 +209,6 @@ public class Dasboard extends javax.swing.JFrame {
     private javax.swing.JTextField tEmail;
     private javax.swing.JTextField tFullName;
     private javax.swing.JMenuItem tLogout;
-    private javax.swing.JTextField tUsename;
+    private javax.swing.JTextField tUsername;
     // End of variables declaration//GEN-END:variables
 }

@@ -119,7 +119,8 @@ public class Product extends Koneksi{
         
     }
     public ResultSet TampilProduct(){
-        query = "SELECT * FROM product";
+        query = "SELECT p.productId, p.productName, c.categoryName, p.productDescription, p.productPrice "
+                + "FROM product p JOIN category c ON p.productCategory = c.categoryId";
         
         try {
             st = koneksi.createStatement();
@@ -136,8 +137,8 @@ public class Product extends Koneksi{
             
             st = koneksi.createStatement();
             rs = st.executeQuery(query);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan");
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Eror : " + sQLException.getMessage());
         }
         return rs;
     }

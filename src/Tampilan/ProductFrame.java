@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.sql.*;
 
 /**
  *
@@ -28,6 +29,7 @@ public class ProductFrame extends javax.swing.JFrame {
     }
     
     void reset(){
+        autoId();
         tID.setText(null);
         tNama.setText(null);
         tPrice.setText(null);
@@ -46,8 +48,8 @@ public class ProductFrame extends javax.swing.JFrame {
             }else {
                 tID.setText("1");
             }
-        } catch (SQLException e) {
-             JOptionPane.showMessageDialog(null, "ID EROR");
+        } catch (SQLException sQLException) {
+             JOptionPane.showMessageDialog(null, "EROR :" + sQLException.getMessage());
         }
     }
     
@@ -61,36 +63,38 @@ public class ProductFrame extends javax.swing.JFrame {
                 cbCategory.addItem(data);
                 
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, " ComboBox EROR");
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, " EROR : " + sQLException.getMessage());
         }
     }
     
     void load_table(){
         DefaultTableModel model = new DefaultTableModel();
+        Product prd = new Product();
         model.addColumn("ID");
         model.addColumn("Nama");
         model.addColumn("Category");
         model.addColumn("Description");
         model.addColumn("Price");
         
+        ResultSet rs = prd.TampilProduct();
         try {
-            Product prd = new Product();
-            ResultSet result = prd.TampilProduct();
-            while (result.next()){
-                String category = (result.getInt("ProductCategory") == 1) ? "Active" : "Inactive";
-                model.addRow(new Object[]{
-                    result.getInt("ProductId"),
-                    result.getString("ProductName"),
-                    category,
-                    result.getString("productDescription"),
-                    result.getInt("ProductPrice"),
-                });
+
+            while (rs.next()){
+               int id = rs.getInt("productId");
+               String name = rs.getString("productName");
+               String category = rs.getString("categoryName");
+               String description = rs.getString("productDescription");
+               int price = rs.getInt("productPrice");
+               
+               Object[] data = {id, name, category, description, price};
+               model.addRow(data);
             }
-            tblProduct.setModel(model);
-        } catch (SQLException e) {
-            System.out.println("Eror : " + e.getMessage());
+            
+        } catch (SQLException sQLException) {
+            System.out.println("Eror : " + sQLException.getMessage());
         }
+        tblProduct.setModel(model);
     }
 
     /**
@@ -151,8 +155,6 @@ public class ProductFrame extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Price");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 273, 130, -1));
-
-        tID.setEnabled(false);
         getContentPane().add(tID, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 77, 137, -1));
         getContentPane().add(tNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 133, 137, -1));
         getContentPane().add(tPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 295, 137, -1));
@@ -164,7 +166,6 @@ public class ProductFrame extends javax.swing.JFrame {
         });
         getContentPane().add(tDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 245, 137, -1));
 
-        cbCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
         getContentPane().add(cbCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 189, 137, -1));
 
         btnTambah.setBackground(new java.awt.Color(0, 102, 0));
@@ -262,19 +263,31 @@ public class ProductFrame extends javax.swing.JFrame {
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
         Product prd = new Product();
-        prd.setProductName(tNama.getText());
-        prd.setProductDescription(tDescription.getText());
-        prd.setProductPrice(Integer.parseInt(tPrice.getText()));
+        Category ctg = new Category();
+        try {
+            prd.setProductName(tNama.getText());
+            prd.setProductDescription(tDescription.getText());
+            prd.setProductPrice(Integer.parseInt(tPrice.getText()));
         
+        ctg.setCategoryName(cbCategory.getSelectedItem().toString());
+        ResultSet rs = ctg.konversi();
         
-        if (cbCategory.getSelectedItem()=="Active") {
-            prd.setProductCategory(1);
-        } else {
-            prd.setProductCategory(0); 
+        if (rs.next()) {
+            int id = rs.getInt("categoryId");
+            prd.setProductCategory(id);
+        } 
+         prd.TambahProduct();
+
+        
+        } catch (NumberFormatException  numberFormatException) {
+            JOptionPane.showMessageDialog(null, "Eror : " + numberFormatException.getMessage());
+        } catch(SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Eror : " + sQLException.getMessage());
         }
-        prd.TambahProduct();
+        
         load_table();
         reset();
+
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void tblProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductMouseClicked
@@ -292,12 +305,8 @@ public class ProductFrame extends javax.swing.JFrame {
             tNama.setText(name);
             tDescription.setText(description);
             tPrice.setText(price);
-            
-            if (category.equals("1") || category.equalsIgnoreCase("Active")) {
-                cbCategory.setSelectedItem("Active");
-            } else {
-                cbCategory.setSelectedItem("Inactive");
-            }
+            cbCategory.setSelectedItem(category);
+        
         }
     }//GEN-LAST:event_tblProductMouseClicked
 
@@ -309,17 +318,28 @@ public class ProductFrame extends javax.swing.JFrame {
     private void btnUbahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUbahActionPerformed
         // TODO add your handling code here:
         Product prd = new Product();
-        prd.setProductId(Integer.parseInt(tID.getText()));
-        prd.setProductName(tNama.getText());
-        prd.setProductDescription(tDescription.getText());
-        prd.setProductPrice(Integer.parseInt(tPrice.getText()));
+        Category ctg = new Category();
+    try {
+            prd.setProductName(tNama.getText());
+            prd.setProductDescription(tDescription.getText());
+            prd.setProductPrice(Integer.parseInt(tPrice.getText()));
         
-        if (cbCategory.getSelectedItem()=="Active") {
-            prd.setProductCategory(1);
-        } else {
-            prd.setProductCategory(0); 
-        }
-        prd.UbahProduct();
+           ctg.setCategoryName(cbCategory.getSelectedItem().toString());
+           ResultSet rs = ctg.konversi();
+        
+        if (rs.next()) {
+            int id = rs.getInt("categoryId");
+            prd.setProductCategory(id);
+        } 
+         prd.UbahProduct();
+
+        
+    } catch (NumberFormatException  numberFormatException) {
+            JOptionPane.showMessageDialog(null, "Eror : " + numberFormatException.getMessage());
+    } catch(SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Eror : " + sQLException.getMessage());
+    }
+        
         load_table();
         reset();
     }//GEN-LAST:event_btnUbahActionPerformed

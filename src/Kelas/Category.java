@@ -104,8 +104,8 @@ public class Category extends Koneksi{
             
             st = koneksi.createStatement();
             rs = st.executeQuery(query);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Database Eror");
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Eror : " + sQLException.getMessage());
         }
         return rs;
     }
@@ -117,8 +117,8 @@ public class Category extends Koneksi{
             ps = koneksi.prepareStatement(query);
             ps.setString(1, this.categoryName);
             rs = ps.executeQuery();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Data Gagal Ditampilkan");
+        } catch (SQLException sQLException) {
+            JOptionPane.showMessageDialog(null, "Eror : " + sQLException.getMessage());
         }
         return rs;  
     }

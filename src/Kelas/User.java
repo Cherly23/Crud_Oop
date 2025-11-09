@@ -166,9 +166,9 @@ public class User  extends Koneksi{
             }else {
                 Sesion.setStatus("Inactive");
             }
-            JOptionPane.showMessageDialog(null, "Username atau Password Benar!");
+            JOptionPane.showMessageDialog(null, "Login Berhasil!");
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Username atau Password Salah!");
+            JOptionPane.showMessageDialog(null, "Login Gagal!");
         }
     }
     
